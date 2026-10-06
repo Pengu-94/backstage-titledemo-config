@@ -215,7 +215,8 @@ enum MarioAnimID {
     /* 0xD0 */ MARIO_ANIM_TRIPLE_JUMP_FLY,
     /* 0xD1 */ MARIO_ANIM_SWIM_WAIT,
     /* 0xD2 */ MARIO_ANIM_SWIM_STOP,
-    /* 0xD3 */ MARIO_ANIM_SWIM_MOVE
+    /* 0xD3 */ MARIO_ANIM_SWIM_MOVE,
+    /* 0xD4 */ MARIO_ANIM_TITLE_DEMO,
 };
 
 #endif // MARIO_ANIMATION_IDS_H

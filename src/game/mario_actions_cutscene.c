@@ -1080,6 +1080,20 @@ s32 act_squished(struct MarioState *m) {
     return FALSE;
 }
 
+
+s32 act_titledemo(struct MarioState *m) {
+    gHudDisplay.flags = HUD_DISPLAY_NONE;
+    
+    stop_and_set_height_to_floor(m);
+    set_mario_animation(m, MARIO_ANIM_TITLE_DEMO);
+
+    if (m->actionTimer++ >= 31) {
+        m->marioBodyState->handState = MARIO_HAND_PEACE_SIGN;
+    }
+
+    return FALSE;
+}
+
 /**
  * advance_cutscene_step: Advances the current step in the current cutscene.
  * Resets action state and action timer, adds 1 to the action arg (responsible
@@ -1182,6 +1196,7 @@ s32 mario_execute_cutscene_action(struct MarioState *m) {
         case ACT_TELEPORT_FADE_OUT:          cancel = act_teleport_fade_out(m);          break;
         case ACT_TELEPORT_FADE_IN:           cancel = act_teleport_fade_in(m);           break;
         case ACT_SQUISHED:                   cancel = act_squished(m);                   break;
+        case ACT_TITLEDEMO:                  cancel = act_titledemo(m);                   break;
     }
     /* clang-format on */
 

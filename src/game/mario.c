@@ -1126,6 +1126,7 @@ void squish_mario_model(struct MarioState *m) {
     if (m->squishTimer != 0xFF) {
         // If no longer squished, scale back to default.
         if (m->squishTimer == 0) {
+
             vec3f_set(m->marioObj->header.gfx.scale, 1.0f, 1.0f, 1.0f);
         }
         // If timer is less than 16, rubber-band Mario's size scale up and down.
@@ -1592,6 +1593,10 @@ void init_mario(void) {
     gMarioState->action =
         (gMarioState->pos[1] <= (gMarioState->waterLevel - 100)) ? ACT_WATER_IDLE : ACT_IDLE;
 
+    if (gCurrLevelNum == LEVEL_TITLEDEMO) {
+        gMarioState->action = ACT_TITLEDEMO;
+    }
+
     mario_reset_bodystate(gMarioState);
     update_mario_info_for_cam(gMarioState);
     gMarioState->marioBodyState->punchState = 0;
@@ -1618,9 +1623,9 @@ void init_mario_from_save_file(void) {
     gMarioState->controller = &gControllers[0];
     gMarioState->animList = &gPlayerAnimsBuf[0];
 
-    gMarioState->numCoins = 2;
+    gMarioState->numCoins = 0;
     gMarioState->numStars =
-        save_file_get_total_star_count(gCurrSaveFileNum - 1, COURSE_MIN - 1, COURSE_MAX - 1) + 1;
+        save_file_get_total_star_count(gCurrSaveFileNum - 1, COURSE_MIN - 1, COURSE_MAX - 1);
     gMarioState->numKeys = 0;
 
     gMarioState->numLives = 2;
@@ -1629,7 +1634,7 @@ void init_mario_from_save_file(void) {
     gMarioState->prevNumStarsForDialog = gMarioState->numStars;
     gMarioState->unkB0 = 0xBD;
 
-    gHudDisplay.coins = 2;
+    gHudDisplay.coins = 0;
     gHudDisplay.wedges = 8;
 
     gMessageHasBeenRead = 0;

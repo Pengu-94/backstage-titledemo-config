@@ -112,7 +112,12 @@ static Hierarchy RCP_TitleMarioHierarchy[] = {
 					hmsBegin()
 						hmsJoint(RM_SURF, RCP_mario_near1, 65, 0, 0)			/* m_larmB1		*/
 						hmsBegin()
-							hmsJoint(RM_SURF, RCP_mario_near0, 60, 0, 0)		/* m_lhamd1		*/
+							hmsSelect(0, CtrlMarioHand)
+							hmsBegin()
+								hmsJoint(RM_SURF, RCP_mario_near0, 60, 0, 0)		/* m_lhamd1		*/
+								hmsJoint(RM_SURF, RCP_swim_hand_l, 60, 0, 0)
+								hmsJoint(RM_SURF, RCP_mario_near0, 60, 0, 0)
+							hmsEnd()
 						hmsEnd()
 					hmsEnd()
 				hmsEnd()
@@ -123,11 +128,21 @@ static Hierarchy RCP_TitleMarioHierarchy[] = {
 					hmsBegin()
 						hmsJoint(RM_SURF, RCP_mario_near4, 65, 0, 0)			/* m_rarmB1		*/
 						hmsBegin()
-							hmsJoint(RM_SURF, RCP_mario_near3, 60, 0, 0)		/* m_rhand1		*/
+							hmsSelect(0, CtrlMarioHand)
+							hmsBegin()
+								hmsJoint(RM_SURF, RCP_mario_near3, 60, 0, 0)		/* m_rhand1		*/
+								hmsBegin()
+									hmsSucker(0,0,0, 0,CtrlMarioTaking)
+								hmsEnd()
+								hmsJoint(RM_SURF, RCP_swim_hand_r, 60, 0, 0)
+								hmsBegin()
+									hmsSucker(0,0,0, 0,CtrlMarioTaking)
+								hmsEnd()
+								hmsJoint(RM_SURF, RCP_mario_vsign_hand, 60, 0, 0)
+							hmsEnd()
 						hmsEnd()
 					hmsEnd()
 				hmsEnd()
-
 			hmsEnd()
 
 			hmsJoint(RM_SURF, NULL, 13, -8, 42)								/* chn15		*/

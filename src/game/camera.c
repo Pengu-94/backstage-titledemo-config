@@ -2482,6 +2482,46 @@ void set_camera_mode(struct Camera *c, s16 mode, s16 frames) {
     vec3f_get_dist_and_angle(end->focus, end->pos, &end->dist, &end->pitch, &end->yaw);
 }
 
+
+/* TITLE DEMO CAMERA - START */
+
+// TODO: Clean this up.
+
+#define TITLEDEMO_CAM_DIV 6.0f
+
+struct CutsceneSplinePoint sTitleDemoSpline[] = {
+	{ 0, 13, { 0, 296/TITLEDEMO_CAM_DIV, (167 - 955)/TITLEDEMO_CAM_DIV }},
+	{ 1, 11, { 0, 306/TITLEDEMO_CAM_DIV, (410 - 925)/TITLEDEMO_CAM_DIV }},
+	{ 2, 9, { 0, 315/TITLEDEMO_CAM_DIV, (652 - 888)/TITLEDEMO_CAM_DIV  }},
+	{ 3, 8, { 0, 327/TITLEDEMO_CAM_DIV, (882 - 565)/TITLEDEMO_CAM_DIV  }},
+	{ 4, 6, { 0, (340*1.45)/TITLEDEMO_CAM_DIV, 1250/TITLEDEMO_CAM_DIV }},
+	{ 5, 4, { 0, (285*2.0)/TITLEDEMO_CAM_DIV,  1475/TITLEDEMO_CAM_DIV }},
+	{ 6, 4, { 0, (335*2.0)/TITLEDEMO_CAM_DIV,  (790*1.65 + 444)/TITLEDEMO_CAM_DIV  }},
+	{ 6, 6, { 0, (335*2.0)/TITLEDEMO_CAM_DIV,  (790*1.65 + 444)/TITLEDEMO_CAM_DIV  }},
+	{ 7, 6, { 0, (295*2.0)/TITLEDEMO_CAM_DIV,  (745*1.65 + 444)/TITLEDEMO_CAM_DIV  }},
+	{ 8, 6, { 0, (275*2.0)/TITLEDEMO_CAM_DIV,  (745*1.475 + 444)/TITLEDEMO_CAM_DIV }},
+	{ 9, 6, { 0, (275*2.0)/TITLEDEMO_CAM_DIV,  (731*1.475 + 444)/TITLEDEMO_CAM_DIV }},
+	{ 10, 6, { 0, (275*2.0)/TITLEDEMO_CAM_DIV, (731*1.475 + 444)/TITLEDEMO_CAM_DIV }},
+	{ -1, 1, { 0, (275*2.0)/TITLEDEMO_CAM_DIV, (787*1.475 + 444)/TITLEDEMO_CAM_DIV }},
+};
+
+u8 sShouldTitleDemoMove = TRUE;
+
+void mode_cutscene_title_demo(struct Camera *c) {
+    if (sShouldTitleDemoMove == TRUE) {
+        if (move_point_along_spline(c->pos, sTitleDemoSpline, &sCutsceneSplineSegment, &sCutsceneSplineSegmentProgress) == 1) {
+            sShouldTitleDemoMove = FALSE;
+        }
+    }
+    
+    vec3f_set(c->focus, 0, 160/TITLEDEMO_CAM_DIV, -1250/TITLEDEMO_CAM_DIV);
+
+    vec3f_copy(gLakituState.pos, c->pos);
+    vec3f_copy(gLakituState.focus, c->focus);
+}
+
+/* TITLE DEMO CAMERA - END */
+
 /**
  * Updates Lakitu's position/focus and applies camera shakes.
  */
@@ -2688,6 +2728,10 @@ void update_camera(struct Camera *c) {
             case CAMERA_MODE_SPIRAL_STAIRS:
                 mode_spiral_stairs_camera(c);
                 break;
+
+            case CAMERA_MODE_TITLE_DEMO:
+                mode_cutscene_title_demo(c);
+                break;
         }
     }
     // Start any Mario-related cutscenes
@@ -2780,6 +2824,7 @@ void init_camera(struct Camera *c) {
     Vec3f marioOffset;
     s32 i;
 
+    sShouldTitleDemoMove = TRUE;
     gPrevLevel = gCurrLevelArea / 16;
     gCurrLevelArea = gCurrLevelNum * 16 + gCurrentArea->index;
     sFramesPaused = 0;
